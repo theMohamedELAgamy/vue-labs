@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<style>
+    body {
+  background-color: rgb(120, 120, 216);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+#app{
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top:50%;
+}
+.inputs{
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top:50%;
+}
+</style> 
+<body>
+    <script src="https://unpkg.com/vue@3"></script>
+
+        <div class=" p-10 container text-center" id="app">
+            <div class="inputs form-outline ">
+                <div class="m-3">
+                    <button  type="button" @click="showForm" class="m-3 btn btn-dark">Form</button>
+                    <button type="button" @click="showStudents" class="m-3 btn btn-dark">Students</button>
+                    <button type="button" @click="showAdmins"class="m-3 btn btn-dark">Admins</button>
+                </div>
+                <div v-show="showTool">
+                        <input type="text" class=" m-3 bg-dark text-light form-control" v-model="name" placeholder="Enter Name" aria-label="Enter Name" >
+                        <input type="number" class="m-3  bg-dark text-light form-control"v-model="age" placeholder="Age" aria-label="Enter Age" >
+                        <input type="text" class="m-3  bg-dark text-light form-control" v-model="address"placeholder="Address" aria-label="Enter Address" >
+                        <form v-model="type">
+                        <input class="form-check-input"  type="radio" name="student" value="student" v-model="type" id="flexRadioDisabled" >
+                        <label class="form-check-label" for="flexRadioDisabled">
+                        Student
+                        </label>
+                    </br>
+                        <input class="form-check-input"  type="radio" name="admin" value="admin" v-model="type" id="flexRadioDisabled" >
+                        <label class="form-check-label" for="flexRadioDisabled">
+                            Admin
+                        </label>
+                    </form>
+                    </br>
+
+                        <button type="button" @click="addUser" class="m-3 btn btn-dark btn-lg">Add User</button>
+                    </div>
+                </div>
+                <div v-show="!showTool" class="" name="students" id="students">
+                </br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+                </br></br>
+                
+                    <table class="table table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in arr">
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.age}}</td>
+                                <td>{{item.address}}</td>
+                                <td><button type="button" @click='deleteUser(item)' class=" btn btn-danger ">Delete</button></td>
+                                
+                            </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+           
+        </div>
+      
+
+        <script>
+            students=[
+                {id:1,name:'stu mohamed',age:50,address:'alex'},
+                {id:2,name:'stu ahmed',age:40,address:'cairo'},
+                {id:3,name:'stu ali',age:60,address:'aswan'},
+                {id:4,name:'stu yasser',age:30,address:'giza'},
+
+            ]
+            admins=[
+                {id:1,name:'admin1',age:50,address:'alex'},
+                {id:2,name:'admin2',age:40,address:'cairo'},
+                {id:3,name:'admin3',age:60,address:'aswan'},
+                {id:4,name:'admin4',age:30,address:'giza'},
+
+            ]
+        const app=Vue.createApp({
+            data:()=>({
+                showTool:true,
+                arr:students,
+                name:'',
+                age:'',
+                address:'',
+                type:null,
+                currentView:'form'
+            }),
+            methods:{
+                showForm(){
+                    this.showTool=true
+                    this.currentView='form'
+                },
+                showAdmins(){
+                    this.showTool=false
+                    this.arr=admins
+                    this.currentView='admins'
+                },
+                showStudents(){
+                    this.showTool=false
+                    this.arr=students
+                    this.currentView='students'
+                },
+                addUser(){
+                    newUser={
+                        id:Math.floor((Math.random() * 100) + 1),
+                        name:this.name,
+                        age:this.age,
+                        address:this.address
+                    }
+                    
+                    if(this.type=='admin'){
+                        admins.push(newUser)
+                      
+            
+                    }else if(this.type=='student'){
+                        students.push(newUser)
+                      
+                    }
+                    this.name=null
+                    this.age=null
+                    this.address=null
+                    this.type=null
+                },
+                deleteUser(item){
+                    array=[]
+                    if(this.currentView=='students') {
+                        for(i=0;i<students.length;i++){
+                        if(students[i].id==Number(item.id)){ 
+                            console.log('lol') 
+                            var toRemove = students[i];
+                            students = students.filter(function(item) {
+                                return item !== toRemove
+                            });
+                            this.arr=students
+                            break
+                        }
+                    }
+
+                    }
+                    else if(this.currentView=='admins'){
+                        for(i=0;i<admins.length;i++){
+                        if(admins[i].id==Number(item.id)){  
+                            var toRemove = admins[i];
+                            admins = admins.filter(function(item) {
+                                return item !== toRemove
+                            });
+                            this.arr=admins
+                            break
+                        }
+                    }
+
+                }
+            }
+            }
+
+        })
+        app.mount('#app')
+        </script>
+    
+</body>
+</html>
