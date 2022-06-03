@@ -42,9 +42,7 @@ export default {
     created() {
     this.getAllEmps();
   },
-  updated(){
-      this.getAllEmps();
-  },
+ 
   methods: {
     async getAllEmps() {
       await axios
@@ -63,6 +61,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.emps = res.data;
+          this.getAllEmps();
         })
         .catch((err) => {
           console.log(err);
